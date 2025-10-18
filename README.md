@@ -1,111 +1,71 @@
 🧠 Overview
 
-This project simulates an autonomous drone mission in the Gazebo simulation environment using DroneKit-Python and ArduPilot SITL.
-The goal was to connect to a simulated drone, switch to GUIDED mode, take off, and move from one point to another automatically.
+🚁 DroneKit Gazebo Simulation Project
+📖 Proje Hakkında
 
-This work was prepared as part of the KÜ OAT Club Application Assignment to demonstrate DroneKit–Gazebo integration and autonomous flight logic.
+Bu proje, DroneKit-Python ve Gazebo kullanılarak bir drone simülasyonu oluşturmayı amaçlamaktadır.
+Python kodu, sanal ortamda (virtual environment) çalışan DroneKit API’si aracılığıyla ArduCopter (SITL) simülasyonuna bağlanır.
 
-⚙️ Technologies Used
+⚙️ Kullanılan Teknolojiler
 
 Python 3.10+
 
-DroneKit-Python
-
-ArduPilot SITL
+DroneKit
 
 MAVProxy
 
-Gazebo
+ArduPilot SITL
 
-VS Code (development environment)
+Gazebo 11
 
-Virtual Environment (.venv) for dependency management
+Virtual Environment (.venv)
 
-🪜 Setup & Installation
+🧠 Proje Yapısı
+dronekit_gazebo_project/
+│
+├── main.py
+├── requirements.txt
+├── .venv/
+└── README.md
 
-Clone this repository
-
-git clone https://github.com/MeldaYuceee/dronekit_gazebo_project.git
-cd dronekit_gazebo_project
-
-
-Create and activate virtual environment
-
+🚀 Kurulum
+# Sanal ortam oluştur
 python -m venv .venv
-.venv\Scripts\activate    # Windows
-# or
-source .venv/bin/activate # macOS / Linux
 
+# Ortamı etkinleştir
+.venv\Scripts\activate
 
-Install dependencies
+# Gerekli kütüphaneleri yükle
+pip install -r requirements.txt
 
-pip install dronekit dronekit-sitl mavproxy
+# ArduPilot SITL başlat
+sim_vehicle.py -v ArduCopter -f gazebo-iris --console --map
 
+# Ardından Gazebo’yu çalıştır
+gazebo --verbose worlds/iris_arducopter_runway.world
 
-Launch SITL (Software In The Loop)
+🧩 main.py Özeti
 
-sim_vehicle.py -v ArduCopter -L KSFO --console --map
+Drone’a bağlantı kurar
 
+Kalkış komutu gönderir
 
-Run the mission script
+GPS verisi üzerinden konum takibi yapar
 
-python main.py
+Uçuş modunu GUIDED olarak değiştirir
 
-🧩 main.py Summary
+⚠️ Karşılaşılan Sorun
 
-The script connects to the simulated drone, waits for GPS lock, switches to GUIDED mode, and executes a simple waypoint mission.
+Drone bağlantısı ve başlatma işlemi sorunsuz olsa da, sistem “Araç başlatılıyor, GPS bekleniyor...” aşamasında kalmaktadır.
+Bu durumun olası nedeni:
 
-from dronekit import connect, VehicleMode, LocationGlobalRelative
-import time
+Gazebo’da GPS modülünün aktif olmaması,
 
-print("Connecting to vehicle...")
-vehicle = connect('127.0.0.1:14550', wait_ready=True)
+SITL ortamında simülasyon saatinin başlamamış olması,
 
-print("Arming drone...")
-vehicle.mode = VehicleMode("GUIDED")
-vehicle.armed = True
-time.sleep(3)
+veya GUIDED moduna geçişin tekrarlanması.
 
-print("Taking off...")
-vehicle.simple_takeoff(10)
+🔍 Sonuç
 
-target = LocationGlobalRelative(37.874, -122.302, 10)
-print("Going to target waypoint...")
-vehicle.simple_goto(target)
-
-time.sleep(20)
-print("Mission complete.")
-vehicle.close()
-
-⚠️ Issue Encountered
-
-During testing, the system connected successfully but got stuck in the following loop:
-
-Araç başlatılıyor, GPS bekleniyor...
-GUIDED moduna geçiliyor...
-(repeating indefinitely)
-
-🔍 Cause
-
-The simulated drone could not obtain a valid GPS 3D fix, preventing arming and guided mode activation.
-
-🧰 Attempts & Troubleshooting
-
-Launched SITL with GPS parameter:
-
-sim_vehicle.py -v ArduCopter -L KSFO --gps --console --map
-
-
-Disabled arming check for debugging:
-
-param set ARMING_CHECK 0
-
-
-Verified correct connection port (127.0.0.1:14550 or 127.0.0.1:5760).
-
-🚧 Current Project Status
-Stage	Status	Description
-SITL setup	✅ Completed	Gazebo and ArduPilot successfully integrated
-DroneKit connection	✅ Successful	Vehicle connected and initialized
-GPS lock	⚠️ Failed	Stuck in “waiting for GPS” loop
-Guided mode & movement	❌ Not achieved	Pending GPS fix to proceed
+Proje altyapısı eksiksiz hazırlanmış olup; bağlantı, yapılandırma ve mod geçişleri başarılıdır.
+Ancak GPS senkronizasyonu ve uçuş başlatma kısmında hata devam ettiği için proje bu aşamada durdurulmuştur.
