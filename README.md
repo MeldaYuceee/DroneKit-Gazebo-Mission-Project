@@ -1,26 +1,30 @@
-🧠 Overview
+# DroneKit–Gazebo UAV Simulation (ArduCopter / SITL)
 
-🚁 DroneKit Gazebo Simulation Project
-📖 Proje Hakkında
+> **Domain:** UAV Simulation / Telemetry / Autopilot  
+> **Level:** Prototype (Student R&D)  
+> **Purpose:** Establish a minimal UAV simulation environment using DroneKit, Gazebo and ArduPilot SITL for basic flight control experimentation.
 
-Bu proje, DroneKit-Python ve Gazebo kullanılarak bir drone simülasyonu oluşturmayı amaçlamaktadır.
-Python kodu, sanal ortamda (virtual environment) çalışan DroneKit API’si aracılığıyla ArduCopter (SITL) simülasyonuna bağlanır.
+---
 
-⚙️ Kullanılan Teknolojiler
+## 1. Background & Objective
+Modern UAV systems rely on safe autonomous flight, reliable telemetry and accurate sensor simulation before real flight testing.  
+This project sets up a **virtual drone environment** using DroneKit (Python), Gazebo and ArduPilot’s SITL (Software In The Loop) to experiment with basic flight commands, mode changes and telemetry flow.
 
-Python 3.10+
+The objective is not to create a full mission controller, but to build a **working foundation** for future experiments in autonomous control and UAV decision logic.
 
-DroneKit
+---
 
-MAVProxy
+## 2. Technologies
+- Python 3.10+
+- DroneKit
+- MAVProxy
+- ArduPilot SITL (ArduCopter)
+- Gazebo 11
+- Virtual Environment (.venv)
 
-ArduPilot SITL
+---
 
-Gazebo 11
-
-Virtual Environment (.venv)
-
-🧠 Proje Yapısı
+## 3. Project Structure
 dronekit_gazebo_project/
 │
 ├── main.py
@@ -28,44 +32,10 @@ dronekit_gazebo_project/
 ├── .venv/
 └── README.md
 
-🚀 Kurulum
-# Sanal ortam oluştur
+---
+## 4. Installation & Run
+
+### Create virtual environment
+```bash
 python -m venv .venv
 
-# Ortamı etkinleştir
-.venv\Scripts\activate
-
-# Gerekli kütüphaneleri yükle
-pip install -r requirements.txt
-
-# ArduPilot SITL başlat
-sim_vehicle.py -v ArduCopter -f gazebo-iris --console --map
-
-# Ardından Gazebo’yu çalıştır
-gazebo --verbose worlds/iris_arducopter_runway.world
-
-🧩 main.py Özeti
-
-Drone’a bağlantı kurar
-
-Kalkış komutu gönderir
-
-GPS verisi üzerinden konum takibi yapar
-
-Uçuş modunu GUIDED olarak değiştirir
-
-⚠️ Karşılaşılan Sorun
-
-Drone bağlantısı ve başlatma işlemi sorunsuz olsa da, sistem “Araç başlatılıyor, GPS bekleniyor...” aşamasında kalmaktadır.
-Bu durumun olası nedeni:
-
-Gazebo’da GPS modülünün aktif olmaması,
-
-SITL ortamında simülasyon saatinin başlamamış olması,
-
-veya GUIDED moduna geçişin tekrarlanması.
-
-🔍 Sonuç
-
-Proje altyapısı eksiksiz hazırlanmış olup; bağlantı, yapılandırma ve mod geçişleri başarılıdır.
-Ancak GPS senkronizasyonu ve uçuş başlatma kısmında hata devam ettiği için proje bu aşamada durdurulmuştur.
